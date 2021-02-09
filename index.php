@@ -1,3 +1,21 @@
+<?php
+    session_start();
+    if(isset($_SESSION['names'])){
+        $names=$_SESSION['names'];
+    }
+
+    $method=$_SERVER['REQUEST_METHOD'];
+    if($method=='POST'){
+        $firstname=$_POST['firstname'];
+        $lastname=$_POST['lastname'];
+        $name['first']=$firstname;
+        $name['last']=$lastname;
+        $names[]=$name;
+        $_SESSION['names']=$names;
+        header("Location: index.php");
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +34,22 @@
     </nav>
 
     <div class="container">
+        <table class="table">
+            <thead><tr><th>Last Name</th><th>First Name</th></tr></thead>
+            <tbody>
+                <?php
+                    for($index=0;$index<count($names);$index++){
+                        echo "<tr><td>".$names[$index]['last']."</td><td>".$names[$index]['first']."</td></tr>";
+                    }
+                ?>
+            </tbody>        
+        </table>
+    </div>
+
+    <div class="container">
         <h3>Add Name</h3>
-        <form action="index.php" method="GET">
+        <?php echo $lastname.", ".$firstname; ?>
+        <form action="index.php" method="POST">
             <div class="mb-3">
                 <label for="firstname" class="form-label">First Name</label>
                 <input type="text" class="form-control" name="firstname" id="firstname">       
